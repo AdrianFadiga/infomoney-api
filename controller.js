@@ -10,12 +10,20 @@ module.exports = {
     return res.json(data)
   },
 
-  async getTickers (_req, res) {
+  async getCarousel (_req, res) {
     const { data } = await axios({
       method: 'get',
       url: 'https://api.infomoney.com.br/ativos/ticker?type=json'
     })
     return res.json(data)
+  },
+
+  async getStocks (_req, res) {
+    const { data: { Data } } = await axios({
+      method: 'get',
+      url: 'https://api.infomoney.com.br/markets/high-low/b3?sector=Todos&orderAtributte=Volume&pageIndex=1&pageSize=15&search=&type=json'
+    })
+    return res.json(Data)
   }
 }
 
@@ -26,8 +34,8 @@ module.exports = {
 // 'https:// api.infomoney.com.br/markets/high-low/b3?sector=Todos&orderAtributte=High&pageIndex=1&pageSize=15&search=&type=json'
 
 // getAll orderBy queda;
-// 'https://api.infomoney.com.br/markets/high-low/b3?sector=Todos&orderAtributte=Low&pageIndex=1&pageSize=15&search=&type=json'
-
+// 'https:/tributte=Low&pageIndex=1&pageSize=15&search=&type=json'
+// /api.infomoney.com.br/markets/high-low/b3?sector=Todos&orderA
 // carrossel infoMoney:
 // verificar de sempre passar a hora e o minuto na hora de fazer a requisição
 // 'https://api.infomoney.com.br/ativos/ticker?type=json&_=1412'

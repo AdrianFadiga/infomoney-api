@@ -3,6 +3,8 @@ const controller = require('./controller')
 
 router.get('/stocks/:stockCode', controller.getByStockCode)
 
-router.get('/stocks', controller.getTickers)
+router.get('/carousel', controller.getCarousel)
+
+router.get('/stocks', controller.getStocks)
 
 module.exports = router
