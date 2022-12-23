@@ -7,4 +7,6 @@ router.get('/carousel', controller.getCarousel)
 
 router.get('/stocks', controller.getStocks)
 
+router.get('/mergeStockTypeId', controller.mergeStockTypeId)
+
 module.exports = router

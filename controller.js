@@ -1,4 +1,8 @@
 const { default: axios } = require('axios')
+const fs = require('fs')
+const path = require('path')
+const allTickers = require('./all_tickers.json')
+const { fetchTicker } = require('./helpers')
 
 module.exports = {
   async getByStockCode (req, res) {
@@ -19,11 +23,34 @@ module.exports = {
   },
 
   async getStocks (_req, res) {
-    const { data: { Data } } = await axios({
+    const { data } = await axios({
       method: 'get',
-      url: 'https://api.infomoney.com.br/markets/high-low/b3?sector=Todos&orderAtributte=Volume&pageIndex=1&pageSize=15&search=&type=json'
+      url: 'https://api.infomoney.com.br/markets/high-low/b3?sector=Todos&orderAtributte=Volume&pageIndex=1&pageSize=5000&search=&type=json'
     })
-    return res.json(Data)
+
+    try {
+      fs.writeFileSync(`${path.join(__dirname)}/all_tickers.json`, JSON.stringify(data))
+    } catch (err) {
+      console.log(err)
+    }
+    return res.json(data)
+  },
+
+  async fetchTicker (stockCode) {
+    const { data } = await axios({
+      method: 'get',
+      url: `https://api.infomoney.com.br/ativos/${stockCode}/detalhe?type=json`
+    })
+    console.log(data)
+    return data
+  },
+
+  async mergeStockTypeId (_req, res) {
+    const tickersPromises = allTickers.Data.map((ticker) => fetchTicker(ticker.StockCode))
+    const teste = await Promise.all(tickersPromises)
+    // console.log(teste)
+    fs.writeFileSync(`${path.join(__dirname)}/all_detailed_tickers.json`, JSON.stringify(teste))
+    return res.json('Foi!')
   }
 }
 
